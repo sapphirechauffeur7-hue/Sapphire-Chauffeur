@@ -1,0 +1,15 @@
+{
+  "name": "sapphire-chauffeur",
+  "version": "1.0.0",
+  "description": "Sapphire Chauffeur – Luxury scroll animation website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["chauffeur", "luxury", "scroll-animation"],
+  "author": "Sapphire Chauffeur",
+  "license": "ISC"
+}

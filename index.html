@@ -196,7 +196,7 @@
       <!-- Top Heading & Subheading (fades away at 20% scroll) -->
       <div class="hero-overlay" id="hero-overlay">
         <h1 class="hero-heading">Sapphire Chauffeur</h1>
-        <div class="hero-subheading">
+        <div class="hero-subheading floating-3d">
           <span>Scroll Down</span>
           <svg class="scroll-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <polyline points="6 9 12 15 18 9"></polyline>
@@ -209,7 +209,13 @@
   <!-- ================================================================= -->
   <!-- 2. SAPPHIRE CHAUFFEUR CONTENT SECTIONS (BELOW SCROLL ANIMATION)   -->
   <!-- ================================================================= -->
-  <div class="relative z-20 bg-background" id="main-content">
+  <div class="relative z-20 bg-background overflow-hidden" id="main-content">
+
+    <!-- Ambient 3D Depth Floating Light Orbs -->
+    <div class="ambient-orb orb-sapphire top-[8%] -left-40"></div>
+    <div class="ambient-orb orb-gold top-[28%] -right-36"></div>
+    <div class="ambient-orb orb-sapphire top-[52%] -left-36"></div>
+    <div class="ambient-orb orb-gold top-[76%] -right-32"></div>
 
     <!-- Smooth Transition from Flight Canvas into Main Content -->
     <div class="smooth-divider divider-black-to-charcoal"></div>
@@ -507,7 +513,7 @@
 
           <!-- Fleet 2: Cadillac Escalade ESV -->
           <div class="bg-midnight-blue rounded-lg overflow-hidden border border-secondary transition-all duration-300 group flex flex-col justify-between relative shadow-[0_0_30px_rgba(201,161,91,0.15)]">
-            <div class="absolute top-0 right-0 bg-secondary text-on-secondary font-label-sm font-bold px-3 py-1 text-[11px] tracking-widest uppercase rounded-bl">
+            <div class="absolute top-0 right-0 bg-secondary text-on-secondary font-label-sm font-bold px-3 py-1 text-[11px] tracking-widest uppercase rounded-bl floating-3d z-10">
               MOST POPULAR
             </div>
             <div>
@@ -822,7 +828,7 @@
 
           <!-- Pricing Card 2: Luxury SUV -->
           <div class="bg-midnight-blue rounded-lg p-6 border-2 border-secondary relative shadow-xl flex flex-col justify-between">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-secondary text-on-secondary px-3 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-secondary text-on-secondary px-3 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase floating-3d z-10 shadow-lg">
               RECOMMENDED
             </div>
             <div>

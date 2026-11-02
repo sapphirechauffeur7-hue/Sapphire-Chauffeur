@@ -260,3 +260,173 @@ window.addEventListener('scroll', () => {
     navbar.classList.remove('scrolled');
   }
 });
+
+// -------------------------------------------------------------
+// 3. PREMIUM 3D ANIMATION & INTERACTION ENGINE
+// -------------------------------------------------------------
+(() => {
+  // 1. Dynamic 3D Card Tilt with Specular Glare Tracking
+  function init3DTiltCards() {
+    const cards = document.querySelectorAll(`
+      #booking > div,
+      #services .grid > div,
+      #fleet .grid > div,
+      #why-choose .grid > div,
+      #why-choose .lg\\:col-span-5 > div,
+      #service-area .rounded-xl,
+      #pricing .grid > div,
+      #about .rounded-lg,
+      #reviews .grid > div,
+      .tilt-3d
+    `);
+
+    cards.forEach(card => {
+      if (!card || card.dataset.tiltInit === 'true') return;
+      card.dataset.tiltInit = 'true';
+      card.classList.add('tilt-3d');
+
+      // Create dynamic 3D glare layer if not present
+      if (!card.querySelector('.tilt-glare')) {
+        const glare = document.createElement('div');
+        glare.className = 'tilt-glare';
+        card.appendChild(glare);
+      }
+
+      const glare = card.querySelector('.tilt-glare');
+      let rafId = null;
+
+      card.addEventListener('mousemove', (e) => {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width;
+          const y = (e.clientY - rect.top) / rect.height;
+
+          // Compute 3D rotation angles (-7deg to +7deg)
+          const rx = ((0.5 - y) * 14).toFixed(2);
+          const ry = ((x - 0.5) * 14).toFixed(2);
+
+          card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(12px) scale3d(1.018, 1.018, 1.018)`;
+          if (glare) {
+            glare.style.background = `radial-gradient(circle at ${(x * 100).toFixed(1)}% ${(y * 100).toFixed(1)}%, rgba(255, 255, 255, 0.32) 0%, rgba(235, 192, 119, 0.12) 40%, transparent 72%)`;
+            glare.style.opacity = '1';
+          }
+        });
+      });
+
+      card.addEventListener('mouseleave', () => {
+        if (rafId) cancelAnimationFrame(rafId);
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale3d(1, 1, 1)';
+        if (glare) {
+          glare.style.opacity = '0';
+        }
+      });
+    });
+  }
+
+  // 2. 3D Perspective Scroll Reveal Animation (Intersection Observer)
+  function init3DScrollReveal() {
+    const revealTargets = document.querySelectorAll(`
+      #services .text-center,
+      #services .grid > div,
+      #fleet .text-center,
+      #fleet .grid > div,
+      #fleet .grid + div,
+      #why-choose .space-y-8,
+      #why-choose .lg\\:col-span-5,
+      #service-area .text-center,
+      #service-area .rounded-xl,
+      #pricing .text-center,
+      #pricing .grid > div,
+      #about .space-y-6,
+      #about .relative,
+      #reviews .text-center,
+      #reviews .grid > div,
+      #faq .text-center,
+      #faq .space-y-4,
+      #cta .space-y-8
+    `);
+
+    revealTargets.forEach((el, index) => {
+      el.classList.add('reveal-3d');
+      // Stagger siblings slightly
+      const delay = (index % 4) * 0.1;
+      el.style.transitionDelay = `${delay}s`;
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealTargets.forEach(el => observer.observe(el));
+  }
+
+  // 3. Add 3D Button Depth to all Primary Action Buttons
+  function init3DButtons() {
+    const buttons = document.querySelectorAll(`
+      a[href="#booking"],
+      a[href^="tel:"],
+      button[type="submit"],
+      #quoteForm a,
+      #cta a,
+      #service-area button,
+      .nav-item-link
+    `);
+
+    buttons.forEach(btn => {
+      btn.classList.add('btn-3d');
+    });
+  }
+
+  // 4. Subtle Ambient 3D Parallax on Scroll
+  function init3DParallax() {
+    const parallaxImages = document.querySelectorAll(`
+      #services img,
+      #fleet img,
+      #about img,
+      #service-area img
+    `);
+
+    parallaxImages.forEach(img => {
+      img.classList.add('card-image-3d');
+    });
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const orbs = document.querySelectorAll('.ambient-orb');
+          orbs.forEach((orb, i) => {
+            const factor = (i + 1) * 0.05;
+            orb.style.transform = `translate3d(0, ${scrollY * factor}px, 0)`;
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  // Initialize 3D Engine
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      init3DTiltCards();
+      init3DScrollReveal();
+      init3DButtons();
+      init3DParallax();
+    });
+  } else {
+    init3DTiltCards();
+    init3DScrollReveal();
+    init3DButtons();
+    init3DParallax();
+  }
+})();

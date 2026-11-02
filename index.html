@@ -233,13 +233,13 @@
           </button>
         </div>
         <!-- Form Grid -->
-        <form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center" id="quoteForm" onsubmit="event.preventDefault(); showQuoteFeedback();">
+        <form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center" id="quoteForm" action="https://book.mylimobiz.com/v4/(S(3owfkznrjfwrvq1p2fczrlla))/wtransportway" method="get" target="_blank">
           <!-- Pickup Location -->
           <div class="relative bg-gray-50 hover:bg-gray-100/80 border border-gray-200 rounded-lg p-3 transition-colors">
             <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-gray mb-1">Pickup Location</label>
             <div class="flex items-center space-x-2">
               <span class="material-symbols-outlined text-secondary text-[20px]" data-icon="location_on">location_on</span>
-              <input class="w-full bg-transparent border-none p-0 text-sm font-semibold text-midnight-blue focus:ring-0 placeholder:text-gray-400 placeholder:font-normal" id="pickupInput" placeholder="Hotel, DCA, IAD or address" required="" type="text"/>
+              <input class="w-full bg-transparent border-none p-0 text-sm font-semibold text-midnight-blue focus:ring-0 placeholder:text-gray-400 placeholder:font-normal" id="pickupInput" placeholder="Hotel, DCA, IAD or address" type="text"/>
             </div>
           </div>
           <!-- Dropoff Location -->
@@ -247,7 +247,7 @@
             <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-gray mb-1">Destination</label>
             <div class="flex items-center space-x-2">
               <span class="material-symbols-outlined text-secondary text-[20px]" data-icon="flag">flag</span>
-              <input class="w-full bg-transparent border-none p-0 text-sm font-semibold text-midnight-blue focus:ring-0 placeholder:text-gray-400 placeholder:font-normal" id="dropoffInput" placeholder="Capitol Hill, Tysons, BWI..." required="" type="text"/>
+              <input class="w-full bg-transparent border-none p-0 text-sm font-semibold text-midnight-blue focus:ring-0 placeholder:text-gray-400 placeholder:font-normal" id="dropoffInput" placeholder="Capitol Hill, Tysons, BWI..." type="text"/>
             </div>
           </div>
           <!-- Date & Time Selector -->
@@ -260,10 +260,10 @@
           </div>
           <!-- Action CTA Trigger -->
           <div class="flex flex-col justify-end h-full">
-            <button class="w-full bg-midnight-blue hover:bg-[#081B31] text-pure-white border border-secondary font-label-lg font-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-lg flex items-center justify-center space-x-2 group" type="submit">
-              <span class="tracking-wider">GET A QUOTE</span>
+            <a class="w-full bg-midnight-blue hover:bg-[#081B31] text-pure-white border border-secondary font-label-lg font-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-lg flex items-center justify-center space-x-2 group text-center" href="https://book.mylimobiz.com/v4/(S(3owfkznrjfwrvq1p2fczrlla))/wtransportway" rel="noopener noreferrer" target="_blank">
+              <span class="tracking-wider">BOOK NOW</span>
               <span class="material-symbols-outlined text-secondary text-[20px] transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
-            </button>
+            </a>
           </div>
         </form>
         <!-- Dynamic Feedback Display Area -->

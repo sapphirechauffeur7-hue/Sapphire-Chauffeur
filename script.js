@@ -13,7 +13,11 @@
   const FRAME_EXT = '.jpg';
 
   const canvas = document.getElementById('flight-canvas');
-  const ctx = canvas.getContext('2d', { alpha: false });
+  const ctx = canvas.getContext('2d', { alpha: false, desynchronized: false });
+
+  // Always use highest-quality image scaling
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
   const scrollTrack = document.getElementById('scroll-track');
   const heroOverlay = document.getElementById('hero-overlay');
 
@@ -50,7 +54,7 @@
 
   // Resize canvas according to displayPixelRatio
   function resizeCanvas() {
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.max(window.devicePixelRatio || 1, 2); // enforce minimum 2x for sharpness
     const w = window.innerWidth;
     const h = window.innerHeight;
 
@@ -58,6 +62,10 @@
     canvas.height = Math.round(h * dpr);
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
+
+    // Re-apply quality settings after resize (canvas reset clears ctx state)
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
 
     renderFrame(currentFrame);
   }
@@ -92,39 +100,59 @@
       dy = 0;
     }
 
-    ctx.drawImage(img, dx, dy, dw, dh);
+    // Snap to integer pixels to prevent sub-pixel blurriness
+    ctx.drawImage(img, Math.round(dx), Math.round(dy), Math.round(dw), Math.round(dh));
   }
 
   // Preload all 300 images
   function startPreloading() {
-    // 1. Immediately load frame 1
+    // 1. Immediately load frame 1 — wait for full decode before first draw
     const frameOne = new Image();
     frameOne.src = getFrameSrc(1);
-    frameOne.onload = () => {
+    frameOne.decode().then(() => {
       images[1] = frameOne;
       loaded[1] = true;
       if (!isInitialFrameRendered) {
         isInitialFrameRendered = true;
         renderFrame(1);
       }
-    };
-
-    // 2. Load all remaining frames
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
-      if (i === 1) continue;
-      const img = new Image();
-      img.src = getFrameSrc(i);
-      img.onload = () => {
-        images[i] = img;
-        loaded[i] = true;
-        if (!isInitialFrameRendered && (i === 2 || i === 3)) {
+    }).catch(() => {
+      // Fallback: use onload if decode() fails
+      frameOne.onload = () => {
+        images[1] = frameOne;
+        loaded[1] = true;
+        if (!isInitialFrameRendered) {
           isInitialFrameRendered = true;
-          renderFrame(i);
+          renderFrame(1);
         }
       };
-      img.onerror = () => {
-        console.warn(`Failed to load frame ${i}`);
-      };
+    });
+
+    // 2. Load all remaining frames
+    for (let i = 2; i <= TOTAL_FRAMES; i++) {
+      const img = new Image();
+      img.src = getFrameSrc(i);
+      const capturedIndex = i;
+      img.decode().then(() => {
+        images[capturedIndex] = img;
+        loaded[capturedIndex] = true;
+        if (!isInitialFrameRendered && (capturedIndex === 2 || capturedIndex === 3)) {
+          isInitialFrameRendered = true;
+          renderFrame(capturedIndex);
+        }
+      }).catch(() => {
+        img.onload = () => {
+          images[capturedIndex] = img;
+          loaded[capturedIndex] = true;
+          if (!isInitialFrameRendered && (capturedIndex === 2 || capturedIndex === 3)) {
+            isInitialFrameRendered = true;
+            renderFrame(capturedIndex);
+          }
+        };
+        img.onerror = () => {
+          console.warn(`Failed to load frame ${capturedIndex}`);
+        };
+      });
     }
   }
 
@@ -163,9 +191,13 @@
   // Smooth Lerp Render Loop
   function loop() {
     const diff = targetFrame - currentFrame;
-    if (Math.abs(diff) > 0.005) {
-      currentFrame += diff * 0.18;
-      renderFrame(currentFrame);
+    if (Math.abs(diff) > 0.5) {
+      // Faster lerp (0.3 vs 0.18) = snaps to nearest frame quickly = no blurry mid-frame hold
+      currentFrame += diff * 0.3;
+      renderFrame(Math.round(currentFrame));
+    } else if (Math.abs(diff) > 0.001) {
+      currentFrame = targetFrame;
+      renderFrame(Math.round(currentFrame));
     }
     requestAnimationFrame(loop);
   }

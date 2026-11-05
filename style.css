@@ -101,13 +101,8 @@ body {
 
 #flight-canvas {
   display: block;
-  /* Width/height are set dynamically via JS to match DPR-scaled pixel dimensions.
-     Do NOT set static CSS width/height here — it overrides the JS sizing. */
-  width: 100%;
-  height: 100%;
-  image-rendering: -webkit-optimize-contrast; /* Safari */
-  image-rendering: crisp-edges;              /* Fallback */
-  image-rendering: high-quality;             /* Chrome 65+ / Edge */
+  width: 100vw;
+  height: 100vh;
 }
 
 /* ==========================================================================
